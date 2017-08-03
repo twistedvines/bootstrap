@@ -12,7 +12,7 @@ esac
 install_for_mac(){
   initial_setup
   install_brew
-  install_tools
+  install_util
   install_git
   install_rbenv
   install_rubies
