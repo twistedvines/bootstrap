@@ -36,16 +36,10 @@ install_util(){
   batch_install "$BREW_UTIL_PACKAGES"
 }
 
-# install brew-git
-  # configure autocompletion
 install_git() {
   brew install git
-  cp "$(dirname "$0")/.bash_profile.d/git_autocompletion" \
-    "$HOME/.bash_profile.d/"
-  if ![ "$(grep "git_autocompletion" "$HOME/.bash_profile")" ]; then
-    echo "source $HOME/.bash_profile.d/git_autocompletion" >> \
-      "$HOME/.bash_profile"
-  fi
+
+  add_bash_profile_fragment 'git_autocompletion'
 }
 
 install_rbenv() {
@@ -104,6 +98,7 @@ install_docker_toolbox() {
     warning_echo "could not load docker agent plist file: " \
       "this script is being run from a terminal multiplexer!"
   fi
+  add_bash_profile_fragment 'docker-machine-env'
   status_echo "done."
 }
 
@@ -139,5 +134,14 @@ install_via_brew(){
   else
     error_echo "Fatal error occured!"
     return 127
+  fi
+}
+
+add_bash_profile_fragment(){
+  local fragment="$1"
+  cp "${SCRIPT_DIR}/.bash_profile.d/$fragment" "$HOME/.bash_profile.d/$fragment"
+  if ! [ "$(grep "$fragment" "$HOME/.bash_profile")" ]; then
+    echo "source \${HOME}/.bash_profile.d/$fragment" \
+      >> "$HOME/.bash_profile"
   fi
 }
