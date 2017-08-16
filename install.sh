@@ -1,14 +1,5 @@
 #!/bin/bash
 
-DISTRO="$1"
-
-case "$DISTRO"
-  "osx")
-    source "$(dirname "$0")/macos.sh"
-    install_for_mac
-    ;;
-esac
-
 install_for_mac(){
   initial_setup
   install_brew
@@ -22,3 +13,16 @@ install_for_mac(){
   install_docker_toolbox
   install_tools
 }
+
+DISTRO="$1"
+
+if [[ "$0" =~ "-bash" ]]; then
+  echo "You need to run this script via 'bash'."
+else
+  case "$DISTRO" in
+    osx)
+      source "$(dirname "$0")/macos.sh"
+      install_for_mac
+      ;;
+  esac
+fi

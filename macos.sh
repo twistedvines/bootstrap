@@ -21,15 +21,18 @@ initial_setup() {
 
 install_brew() {
   status_echo "installing brew..."
-  [ -z "$(which brew)" ] && \
-    curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install | ruby
+  if [ -z "$(which brew)" ]; then
+    local script="$(2>&1 curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+    local install_result="$(echo "$script" | 2>&1 ruby)"
+  fi
+
   [ -n "$(which brew)" ] && return 0
   for tap in "$TAPS"; do
     status_echo "tapping $tap..."
-    brew tap "$tap"
+    local tap_result="$(2>&1 brew tap "$tap")"
   done
   status_echo "updating brew..."
-  brew update
+  local update_result="$(2>&1 brew update)"
 }
 
 install_util(){
@@ -37,13 +40,13 @@ install_util(){
 }
 
 install_git() {
-  brew install git
+  install_via_brew git
 
   add_bash_profile_fragment 'git_autocompletion'
 }
 
 install_rbenv() {
-  brew install rbenv && eval "$(rbenv init -)"
+  install_via_brew rbenv && eval "$(rbenv init -)"
 }
 
 install_rubies() {
@@ -66,7 +69,7 @@ install_config() {
 # install neovim
   # clone-down my vim settings
 install_neovim() {
-  brew install neovim
+  install_via_brew neovim
   git clone https://github.com/twistedvines/.vim "$HOME/dev/.vim"
   ln -s "$HOME/dev/.vim" "$HOME/.vim"
   ln -s "$HOME/.vim/.vimrc" "$HOME/.vimrc"
@@ -74,14 +77,14 @@ install_neovim() {
 
 # install tmux
 install_tmux() {
-  brew install tmux
+  install_via_brew tmux
 }
 
 # install docker-toolbox
   # fetch the docker-machine.plist from github
 install_docker_toolbox() {
   status_echo "installing docker-toolbox..."
-  brew cask install docker-toolbox
+  install_via_brew docker-toolbox cask
   if ! [ "$(docker-machine ls | grep default)" ]; then
     status_echo "creating boot2docker VM 'default'..."
     docker-machine create --driver "virtualbox" --virtualbox-cpu-count "2" \
@@ -122,8 +125,11 @@ install_via_brew(){
   shift
   local args="$@"
 
-  status_echo "attempting to install $package using brew $args..."
-  local brew_install=$(2>&1 brew install "$args" "$package")
+  local cmd="brew $args install $package"
+
+  status_echo "Attempting to install $package using brew $args..."
+  local brew_install=$(2>&1 $cmd)
+  local brew_install_exit_status=$?
 
   if [ "$(echo "$brew_install" | grep "No available formula")" ]; then
     error_echo "Could not find package $package in brew repos."
@@ -131,8 +137,16 @@ install_via_brew(){
   elif [ "$(echo "$brew_install" | grep "already installed")" ]; then
     warning_echo "Package $package has already been installed."
     return 2
+  elif [ "$(echo "$brew_install" | grep "already an App")" ]; then
+    warning_echo "Package $package has already been installed, but not by brew" \
+      " - check your Applications directory."
+    return 3
+  elif [ $brew_install_exit_status -eq 0 ]; then
+    status_echo "Package '$package' installed successfully."
+    return 0
   else
     error_echo "Fatal error occured!"
+    error_echo "dump: ${brew_install}"
     return 127
   fi
 }
