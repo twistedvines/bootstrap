@@ -4,8 +4,12 @@ source "$(dirname "$0")/util.sh"
 
 SCRIPT_DIR="$(script_dir)"
 
-TAPS=("homebrew/services" "homebrew/versions" "homebrew/cask")
-BREW_UTIL_PACKAGES=(bash-completion curl netcat iterm2)
+TAPS=(
+  "homebrew/services" "homebrew/versions" "homebrew/cask"
+  "brona/iproute2mac"
+)
+
+BREW_UTIL_PACKAGES=(bash-completion curl netcat iterm2 iproute2mac)
 BREW_PACKAGES=(vagrant packer atom postman firefox google-chrome)
 
 SEED_DIRS=("$HOME/.bash_profile.d" "$HOME/dev/config")
