@@ -62,8 +62,9 @@ install_rubies() {
 
 install_config() {
   git clone https://github.com/twistedvines/.config "$HOME/dev/config/.config"
-  git submodule update "$HOME/dev/config/.config"
-  ln -s "$HOME/dev/config/.config" "$HOME/config/.config"
+  cd "$HOME/dev/config/.config"
+  git submodule init && git submodule update
+  ln -s "$HOME/dev/config/.config" "$HOME/.config"
 }
 
 # install neovim
@@ -71,8 +72,16 @@ install_config() {
 install_neovim() {
   install_via_brew neovim
   git clone https://github.com/twistedvines/.vim "$HOME/dev/config/.vim"
-  ln -s "$HOME/dev/config/.vim" "$HOME/.vim"
-  ln -s "$HOME/dev/config/.vim/.vimrc" "$HOME/.vimrc"
+  [ -h "$HOME/.vim" ] || ln -s "$HOME/dev/config/.vim" "$HOME/.vim"
+  [ -h "$HOME/.vimrc" ] || ln -s "$HOME/dev/config/.vim/.vimrc" "$HOME/.vimrc"
+
+  if [ -d "$HOME/.config/nvim" ]; then
+    for vim_conf_dir in "autoload" "colors" "plugged"; do
+      [ -h "$HOME/.config/nvim/$vim_conf_dir" ] || ln -s "$HOME/.vim/$vim_conf_dir" "$HOME/.config/nvim/$vim_conf_dir"
+    done
+  fi
+
+  local plugin_install="$(/usr/local/bin/nvim +PlugInstall +qall)"
 }
 
 # install tmux
