@@ -89,6 +89,10 @@ install_tmux() {
   install_via_brew tmux
 }
 
+install_virtualbox() {
+  install_via_brew virtualbox
+}
+
 # install docker-toolbox
   # fetch the docker-machine.plist from github
 install_docker_toolbox() {

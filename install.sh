@@ -10,6 +10,7 @@ install_for_mac(){
   install_config
   install_neovim
   install_tmux
+  install_virtualbox
   install_docker_toolbox
   install_tools
 }
