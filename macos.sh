@@ -6,7 +6,7 @@ SCRIPT_DIR="$(script_dir)"
 
 TAPS=("homebrew/services" "homebrew/versions" "homebrew/cask")
 BREW_UTIL_PACKAGES=(bash-completion curl netcat iterm2)
-BREW_PACKAGES=(vagrant packer atom postman)
+BREW_PACKAGES=(vagrant packer atom postman firefox google-chrome)
 
 SEED_DIRS=("$HOME/.bash_profile.d" "$HOME/dev/config")
 
