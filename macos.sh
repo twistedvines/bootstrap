@@ -8,7 +8,7 @@ TAPS=("homebrew/services" "homebrew/versions" "homebrew/cask")
 BREW_UTIL_PACKAGES=(bash-completion curl netcat iterm2)
 BREW_PACKAGES=(vagrant packer atom postman)
 
-SEED_DIRS=("$HOME/.bash_profile.d" "$HOME/dev")
+SEED_DIRS=("$HOME/.bash_profile.d" "$HOME/dev/config")
 
 RUBIES=("2.4.1")
 
@@ -61,18 +61,18 @@ install_rubies() {
 }
 
 install_config() {
-  git clone https://github.com/twistedvines/.config "$HOME/dev/.config"
-  git submodule update "$HOME/dev/.config"
-  ln -s "$HOME/dev/.config" "$HOME/.config"
+  git clone https://github.com/twistedvines/.config "$HOME/dev/config/.config"
+  git submodule update "$HOME/dev/config/.config"
+  ln -s "$HOME/dev/config/.config" "$HOME/config/.config"
 }
 
 # install neovim
-  # clone-down my vim settings
+# clone-down my vim settings
 install_neovim() {
   install_via_brew neovim
-  git clone https://github.com/twistedvines/.vim "$HOME/dev/.vim"
-  ln -s "$HOME/dev/.vim" "$HOME/.vim"
-  ln -s "$HOME/.vim/.vimrc" "$HOME/.vimrc"
+  git clone https://github.com/twistedvines/.vim "$HOME/dev/config/.vim"
+  ln -s "$HOME/dev/config/.vim" "$HOME/.vim"
+  ln -s "$HOME/dev/config/.vim/.vimrc" "$HOME/.vimrc"
 }
 
 # install tmux
