@@ -86,6 +86,9 @@ install_neovim() {
   fi
 
   local plugin_install="$(/usr/local/bin/nvim +PlugInstall +qall)"
+
+  ln -s '/usr/local/bin/nvim' '/usr/local/bin/vim'
+  ln -s '/usr/local/bin/nvim' '/usr/local/bin/vi'
 }
 
 # install tmux
