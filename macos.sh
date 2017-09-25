@@ -67,8 +67,8 @@ install_rubies() {
 install_config() {
   git clone https://github.com/twistedvines/.config "$HOME/dev/config/.config"
   cd "$HOME/dev/config/.config"
-  git submodule init && git submodule update
-  ln -s "$HOME/dev/config/.config" "$HOME/.config"
+  git submodule update --init --recursive
+  mkdir -p "$HOME/.config" && git archive | tar -x -C "$HOME/.config"
 }
 
 # install neovim
