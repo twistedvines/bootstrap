@@ -9,8 +9,8 @@ TAPS=(
   "brona/iproute2mac"
 )
 
-BREW_UTIL_PACKAGES=(bash-completion curl netcat iterm2 iproute2mac)
-BREW_PACKAGES=(vagrant packer atom postman firefox google-chrome)
+BREW_UTIL_PACKAGES=(bash-completion curl netcat iterm2 iproute2mac jq)
+BREW_PACKAGES=(vagrant packer atom postman firefox google-chrome alfred)
 
 SEED_DIRS=("$HOME/.bash_profile.d" "$HOME/dev/config")
 
