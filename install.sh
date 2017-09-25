@@ -15,6 +15,10 @@ install_for_mac(){
   install_tools
 }
 
+install_for_arch() {
+  initial_setup
+}
+
 DISTRO="$1"
 
 if [[ "$0" =~ "-bash" ]]; then
@@ -24,6 +28,10 @@ else
     osx)
       source "$(dirname "$0")/macos.sh"
       install_for_mac
+      ;;
+    arch)
+      source "$(dirname "$0")/arch.sh"
+      install_for_arch
       ;;
   esac
 fi
