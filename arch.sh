@@ -18,3 +18,19 @@ initial_setup() {
     [ -d "$dir" ] || mkdir -p "$dir"
   done
 }
+
+install_util() {
+  sync_pacman
+  for pkg in ${UTIL_PACKAGES[@]}; do
+    install_via_pacman "$pkg"
+  done
+}
+
+sync_pacman() {
+  sudo pacman -Sy
+}
+
+install_via_pacman() {
+  local package="$1"
+  sudo pacman -S --noconfirm "$package"
+}

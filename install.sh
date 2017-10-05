@@ -17,6 +17,7 @@ install_for_mac(){
 
 install_for_arch() {
   initial_setup
+  install_util
 }
 
 DISTRO="$1"
