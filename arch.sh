@@ -8,6 +8,7 @@ UTIL_PACKAGES=(
   'extras/bash-completion'
   'community/openbsd-netcat'
   'community/jq'
+  'core/curl'
 )
 
 SEED_DIRS=("$HOME/.bash_profile.d" "$HOME/dev/config")
