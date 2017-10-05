@@ -11,7 +11,11 @@ UTIL_PACKAGES=(
   'core/curl'
 )
 
-SEED_DIRS=("$HOME/.bash_profile.d" "$HOME/dev/config")
+SEED_DIRS=(
+  "$HOME/.bash_profile.d"
+  "$HOME/.bashrc.d/auto-completion.d"
+  "$HOME/dev/config"
+)
 
 initial_setup() {
   for dir in "${SEED_DIRS[@]}"; do
@@ -33,5 +37,46 @@ sync_pacman() {
 
 install_via_pacman() {
   local package="$1"
+  status_echo "installing package $package..."
   sudo pacman -S --noconfirm "$package"
+}
+
+install_git() {
+  install_via_pacman 'git'
+
+  create_file_if_not_exists "${HOME}/.bashrc.d/auto-completion"
+
+  create_symbolic_link_if_not_exists '/usr/share/git/completion/'`
+    `'git-completion.bash' \
+    "${HOME}/.bashrc.d/auto-completion.d/git-completion.bash"
+
+  insert_content_if_not_present "${HOME}/.bashrc.d/auto-completion" \
+    'source "${HOME}/.bashrc.d/auto-completion.d/git-completion.bash"'
+}
+
+create_file_if_not_exists() {
+  local filepath="$1"
+  shift
+  local initial_content="$@"
+
+  if [ ! -f "$filepath" ]; then
+    touch "$filepath"
+    [ -n "$initial_content" ] && echo "$initial_content" > "$filepath"
+  fi
+}
+
+create_symbolic_link_if_not_exists() {
+  local target="$1"
+  local link_name="$2"
+  [ ! -e "$link_name" ] && ln -s "$target" "$link_name"
+}
+
+insert_content_if_not_present() {
+  local filepath="$1"
+  shift
+  local content="$@"
+
+  if ! [[ "$(cat "$filepath")" =~ "$content" ]]; then
+    echo "$content" >> "$filepath"
+  fi
 }
