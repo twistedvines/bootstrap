@@ -44,15 +44,22 @@ install_via_pacman() {
 install_git() {
   install_via_pacman 'git'
 
-  create_file_if_not_exists "${HOME}/.bashrc.d/auto-completion"
+  create_bashrc_autocompletion
 
   create_symbolic_link_if_not_exists '/usr/share/git/completion/'`
     `'git-completion.bash' \
     "${HOME}/.bashrc.d/auto-completion.d/git-completion.bash"
-
-  insert_content_if_not_present "${HOME}/.bashrc.d/auto-completion" \
-    'source "${HOME}/.bashrc.d/auto-completion.d/git-completion.bash"'
 }
+
+# -- SPECIFIC FILE CREATION FUNCTIONS -- #
+
+create_bashrc_autocompletion() {
+  create_file_if_not_exists "${HOME}/.bashrc.d/auto-completion" \
+    'for file in $(find "${HOME}/.bashrc.d/auto-completion.d/" -type f);'`
+    `'do source "$file"; done'
+}
+
+# -- GENERIC HELPER FUNCTIONS -- #
 
 create_file_if_not_exists() {
   local filepath="$1"
