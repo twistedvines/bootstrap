@@ -23,6 +23,7 @@ install_for_arch() {
   install_config
   install_vim
   install_neovim
+  install_tmux
 }
 
 DISTRO="$1"

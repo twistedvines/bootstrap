@@ -91,6 +91,13 @@ install_neovim() {
   done
 }
 
+install_tmux() {
+  install_via_pacman 'community/tmux'
+  clone_repository 'twistedvines/.tmux'
+  install_repository 'twistedvines/.tmux' "${HOME}/.tmux"
+  ln -s "${HOME}/.tmux/.tmux.conf" "${HOME}/.tmux.conf"
+}
+
 # -- SPECIFIC FILE CREATION FUNCTIONS -- #
 
 create_bashrc_autocompletion() {
