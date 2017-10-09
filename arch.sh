@@ -60,6 +60,16 @@ create_bashrc_autocompletion() {
   create_file_if_not_exists "${HOME}/.bashrc.d/auto-completion" \
     'for file in $(find "${HOME}/.bashrc.d/auto-completion.d/" -type f);'`
     `'do source "$file"; done'
+
+  insert_source_line_in_to_bashrc
+}
+
+# -- SPECIFIC FILE CONTENT FUNCTIONS -- #
+
+insert_source_line_in_to_bashrc() {
+  insert_content_if_not_present "${HOME}/.bashrc" \
+    'for file in $(find "$HOME/.bashrc.d/" -type f);'`
+    `'do source "$file"; done'
 }
 
 # -- GENERIC HELPER FUNCTIONS -- #
