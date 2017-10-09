@@ -24,6 +24,8 @@ install_for_arch() {
   install_vim
   install_neovim
   install_tmux
+  install_rbenv
+  install_rubies
 }
 
 DISTRO="$1"

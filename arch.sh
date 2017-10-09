@@ -19,6 +19,8 @@ SEED_DIRS=(
   "$HOME/dev/config"
 )
 
+RUBIES=('2.4.2')
+
 initial_setup() {
   refresh_sudo
   for dir in "${SEED_DIRS[@]}"; do
@@ -32,18 +34,6 @@ install_util() {
   for pkg in ${UTIL_PACKAGES[@]}; do
     install_via_pacman "$pkg"
   done
-}
-
-sync_pacman() {
-  refresh_sudo
-  sudo pacman -Sy
-}
-
-install_via_pacman() {
-  local package="$1"
-  refresh_sudo
-  status_echo "installing package $package..."
-  sudo pacman -S --noconfirm "$package"
 }
 
 install_git() {
@@ -96,6 +86,23 @@ install_tmux() {
   clone_repository 'twistedvines/.tmux'
   install_repository 'twistedvines/.tmux' "${HOME}/.tmux"
   ln -s "${HOME}/.tmux/.tmux.conf" "${HOME}/.tmux.conf"
+}
+
+install_rbenv() {
+  install_via_yaourt 'aur/ruby-build'
+  install_via_yaourt 'aur/rbenv'
+  eval "$(rbenv init -)"
+}
+
+install_rubies() {
+  for ruby in ${RUBIES[@]}; do
+    status_echo "installing ruby $ruby..."
+    rbenv install "$ruby" && \
+      rbenv rehash
+    rbenv local "$ruby"
+    gem install bundler
+    status_echo "finished installing ruby $ruby."
+  done
 }
 
 # -- SPECIFIC FILE CREATION FUNCTIONS -- #
@@ -198,4 +205,22 @@ install_tmp_git_tools() {
   ! [ -d /tmp/git-tools/git-archive-all ] && \
     git clone https://github.com/meitar/git-archive-all.sh.git \
     /tmp/git-tools/git-archive-all
+}
+
+sync_pacman() {
+  refresh_sudo
+  sudo pacman -Sy
+}
+
+install_via_pacman() {
+  local package="$1"
+  refresh_sudo
+  status_echo "installing package $package..."
+  sudo pacman -S --noconfirm "$package"
+}
+
+install_via_yaourt() {
+  local package="$1"
+  status_echo "installing package $package via yaourt..."
+  yaourt -S --noconfirm "$package"
 }
