@@ -9,6 +9,8 @@ UTIL_PACKAGES=(
   'community/openbsd-netcat'
   'community/jq'
   'core/curl'
+  'core/pkg-config'
+  'core/fakeroot'
 )
 
 SEED_DIRS=(
@@ -52,6 +54,20 @@ install_git() {
   create_symbolic_link_if_not_exists '/usr/share/git/completion/'`
     `'git-completion.bash' \
     "${HOME}/.bashrc.d/auto-completion.d/git-completion.bash"
+}
+
+install_yaourt() {
+  umask 0003 # u=rwx,g=rwx,o=r
+
+  git clone 'https://aur.archlinux.org/package-query.git' \
+    '/usr/local/src/package-query'
+  git clone 'https://aur.archlinux.org/yaourt.git' \
+    '/usr/local/src/yaourt'
+
+  umask 0022 # u=rwx,g=rx,o=rx
+
+  cd '/usr/local/src/package-query' && makepkg --noconfirm -si
+  cd '/usr/local/src/yaourt' && makepkg --noconfirm -si
 }
 
 # -- SPECIFIC FILE CREATION FUNCTIONS -- #

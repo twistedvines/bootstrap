@@ -19,6 +19,7 @@ install_for_arch() {
   initial_setup
   install_util
   install_git
+  install_yaourt
 }
 
 DISTRO="$1"
