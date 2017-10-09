@@ -26,6 +26,7 @@ install_for_arch() {
   install_tmux
   install_rbenv
   install_rubies
+  install_docker
 }
 
 DISTRO="$1"

@@ -105,6 +105,14 @@ install_rubies() {
   done
 }
 
+install_docker() {
+  refresh_sudo
+  install_via_pacman 'community/docker'
+  install_via_pacman 'community/docker-compose'
+  sudo systemctl enable docker
+  sudo usermod -a -G docker hobag
+}
+
 # -- SPECIFIC FILE CREATION FUNCTIONS -- #
 
 create_bashrc_autocompletion() {
