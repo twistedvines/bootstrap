@@ -70,6 +70,27 @@ install_yaourt() {
   cd '/usr/local/src/yaourt' && makepkg --noconfirm -si
 }
 
+install_config() {
+  clone_repository 'twistedvines/.config'
+  install_repository 'twistedvines/.config' "${HOME}/.config"
+}
+
+install_vim() {
+  install_via_pacman 'extra/vim'
+  clone_repository 'twistedvines/.vim'
+  install_repository 'twistedvines/.vim' "${HOME}/.vim"
+  ln -s "${HOME}/.vim/.vimrc" "${HOME}/.vimrc"
+}
+
+install_neovim() {
+  install_via_pacman 'community/neovim'
+  install_repository 'twistedvines/.vim' "${HOME}/.vim"
+
+  for file in 'autoload' 'colors' 'plugged'; do
+    ln -s "${HOME}/.vim/$file" "${HOME}/.config/nvim/${file}" > /dev/null
+  done
+}
+
 # -- SPECIFIC FILE CREATION FUNCTIONS -- #
 
 create_bashrc_autocompletion() {
@@ -117,7 +138,57 @@ insert_content_if_not_present() {
   fi
 }
 
+clone_repository() {
+  local repository_name="$1"
+  mkdir -p "/usr/local/src/${repository_name}"
+  git clone \
+    --recurse-submodules \
+    "https://github.com/${repository_name}.git" \
+    "/usr/local/src/${repository_name}"
+
+  git submodule > /dev/null
+  local exit_code=$?
+  if [ $exit_code -ne 128 ]; then
+    cd "/usr/local/src/${repository_name}" && \
+      git submodule update --init --recursive
+  fi
+}
+
+install_repository() {
+  local repository_name="$1"
+  local destination="$2"
+
+  if [ -d "${destination}" ]; then
+    warning_echo "destination ${destination} already exists:"`
+      `" overwriting installation of ${repository_name}."
+  fi
+
+  install_tmp_git_tools
+
+  mkdir -p "$destination"
+  cd "/usr/local/src/${repository_name}"
+  git submodule > /dev/null
+  local exit_code=$?
+
+  echo "exit code for $repository_name: $exit_code"
+
+  if [ $exit_code -ne 128 ]; then
+    echo "using git-archive!"
+    /tmp/git-tools/git-archive-all/git-archive-all.sh --format tar -- - | \
+    tar -x -C "${destination}"
+  else
+    git archive HEAD | tar -x -C "${destination}"
+  fi
+}
+
 refresh_sudo() {
   warning_echo 'refreshing sudo session...'
   sudo -v
+}
+
+install_tmp_git_tools() {
+  ! [ -d /tmp/git-tools ] && mkdir /tmp/git-tools
+  ! [ -d /tmp/git-tools/git-archive-all ] && \
+    git clone https://github.com/meitar/git-archive-all.sh.git \
+    /tmp/git-tools/git-archive-all
 }

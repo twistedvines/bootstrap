@@ -20,6 +20,9 @@ install_for_arch() {
   install_util
   install_git
   install_yaourt
+  install_config
+  install_vim
+  install_neovim
 }
 
 DISTRO="$1"
