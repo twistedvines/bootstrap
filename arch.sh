@@ -18,6 +18,7 @@ SEED_DIRS=(
 )
 
 initial_setup() {
+  refresh_sudo
   for dir in "${SEED_DIRS[@]}"; do
     status_echo "creating directory $dir..."
     [ -d "$dir" ] || mkdir -p "$dir"
@@ -32,11 +33,13 @@ install_util() {
 }
 
 sync_pacman() {
+  refresh_sudo
   sudo pacman -Sy
 }
 
 install_via_pacman() {
   local package="$1"
+  refresh_sudo
   status_echo "installing package $package..."
   sudo pacman -S --noconfirm "$package"
 }
@@ -86,4 +89,9 @@ insert_content_if_not_present() {
   if ! [[ "$(cat "$filepath")" =~ "$content" ]]; then
     echo "$content" >> "$filepath"
   fi
+}
+
+refresh_sudo() {
+  warning_echo 'refreshing sudo session...'
+  sudo -v
 }
