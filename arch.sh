@@ -195,7 +195,7 @@ install_repository() {
   echo "exit code for $repository_name: $exit_code"
 
   if [ $exit_code -ne 128 ]; then
-    echo "using git-archive!"
+    echo 'using git-archive-all'
     /tmp/git-tools/git-archive-all/git-archive-all.sh --format tar -- - | \
     tar -x -C "${destination}"
   else
