@@ -13,6 +13,10 @@ UTIL_PACKAGES=(
   'core/fakeroot'
 )
 
+OTHER_PACKAGES=(
+  'extra/terminology'
+)
+
 SEED_DIRS=(
   "$HOME/.bash_profile.d"
   "$HOME/.bashrc.d/auto-completion.d"
@@ -32,6 +36,13 @@ initial_setup() {
 install_util() {
   sync_pacman
   for pkg in ${UTIL_PACKAGES[@]}; do
+    install_via_pacman "$pkg"
+  done
+}
+
+install_other_packages() {
+  sync_pacman
+  for pkg in ${OTHER_PACKAGES[@]}; do
     install_via_pacman "$pkg"
   done
 }

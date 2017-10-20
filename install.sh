@@ -27,6 +27,7 @@ install_for_arch() {
   install_rbenv
   install_rubies
   install_docker
+  install_other_packages
 }
 
 DISTRO="$1"
