@@ -16,6 +16,7 @@ UTIL_PACKAGES=(
 OTHER_PACKAGES=(
   'extra/terminology'
   'extra/firefox'
+  'extra/chromium'
 )
 
 SEED_DIRS=(
