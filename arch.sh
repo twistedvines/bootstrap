@@ -27,6 +27,8 @@ SEED_DIRS=(
 
 RUBIES=('2.4.2')
 
+DEFAULT_RUBY='2.4.2'
+
 initial_setup() {
   refresh_sudo
   for dir in "${SEED_DIRS[@]}"; do
@@ -105,6 +107,9 @@ install_rbenv() {
   install_via_yaourt 'aur/ruby-build'
   install_via_yaourt 'aur/rbenv'
   eval "$(rbenv init -)"
+
+  create_file_if_not_exists "${HOME}/.bashrc.d/rbenv" \
+    'eval "$(rbenv init -)"'
 }
 
 install_rubies() {
@@ -116,6 +121,8 @@ install_rubies() {
     gem install bundler
     status_echo "finished installing ruby $ruby."
   done
+
+  rbenv global "$DEFAULT_RUBY"
 }
 
 install_docker() {
