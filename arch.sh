@@ -115,7 +115,7 @@ install_rbenv() {
 install_rubies() {
   for ruby in ${RUBIES[@]}; do
     status_echo "installing ruby $ruby..."
-    rbenv install "$ruby" && \
+    rbenv install -s "$ruby" && \
       rbenv rehash
     rbenv local "$ruby"
     gem install bundler
