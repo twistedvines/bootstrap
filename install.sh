@@ -35,6 +35,7 @@ DISTRO="$1"
 if [[ "$0" =~ "-bash" ]]; then
   echo "You need to run this script via 'bash'."
 else
+  source "$(dirname "$0")/.env"
   case "$DISTRO" in
     osx)
       source "$(dirname "$0")/macos.sh"

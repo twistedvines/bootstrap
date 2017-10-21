@@ -4,30 +4,7 @@ source "$(dirname "$0")/util.sh"
 
 SCRIPT_DIR="$(script_dir)"
 
-UTIL_PACKAGES=(
-  'extras/bash-completion'
-  'community/openbsd-netcat'
-  'community/jq'
-  'core/curl'
-  'core/pkg-config'
-  'core/fakeroot'
-)
-
-OTHER_PACKAGES=(
-  'extra/terminology'
-  'extra/firefox'
-  'extra/chromium'
-)
-
-SEED_DIRS=(
-  "$HOME/.bash_profile.d"
-  "$HOME/.bashrc.d/auto-completion.d"
-  "$HOME/dev/config"
-)
-
-RUBIES=('2.4.2')
-
-DEFAULT_RUBY='2.4.2'
+source "$SCRIPT_DIR/.env.arch"
 
 initial_setup() {
   refresh_sudo
