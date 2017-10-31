@@ -9,8 +9,9 @@ TAPS=(
   "brona/iproute2mac"
 )
 
-BREW_UTIL_PACKAGES=(bash-completion curl netcat iterm2 iproute2mac jq)
+BREW_UTIL_PACKAGES=(bash-completion curl netcat iterm2 iproute2mac jq npm)
 BREW_PACKAGES=(vagrant packer atom postman firefox google-chrome alfred)
+NPM_PACKAGES=(livedown)
 
 SEED_DIRS=("$HOME/.bash_profile.d" "$HOME/dev/config")
 
@@ -40,7 +41,13 @@ install_brew() {
 }
 
 install_util(){
-  batch_install "$BREW_UTIL_PACKAGES"
+  batch_install "${BREW_UTIL_PACKAGES[@]}"
+}
+
+install_node_packages() {
+  for pkg in $NPM_PACKAGES; do
+    install_via_npm "$pkg"
+  done
 }
 
 install_git() {
@@ -127,6 +134,19 @@ install_docker_toolbox() {
 
 install_tools(){
   batch_install "${BREW_PACKAGES[@]}"
+}
+
+install_via_npm() {
+  local package="$1"
+  status_echo "Installing npm package $package..."
+  output="$(npm install -g "$package")"
+  local exit_code=$?
+  [ $exit_code -eq 0 ] && status_echo "Installed successfully."
+  if [ $exit_code -ne 0 ]; then
+    error_echo "Something went wrong! Here's the output:"
+    error_echo "$output"
+  fi
+  return $exit_code
 }
 
 # helper functions

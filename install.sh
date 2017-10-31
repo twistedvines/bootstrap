@@ -13,6 +13,7 @@ install_for_mac(){
   install_virtualbox
   install_docker_toolbox
   install_tools
+  install_node_packages
 }
 
 install_for_arch() {
