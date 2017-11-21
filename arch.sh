@@ -110,6 +110,10 @@ install_docker() {
   sudo usermod -a -G docker hobag
 }
 
+install_fonts() {
+  install_via_yaourt 'ttf-monaco'
+}
+
 # -- SPECIFIC FILE CREATION FUNCTIONS -- #
 
 create_bashrc_autocompletion() {
