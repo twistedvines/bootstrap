@@ -114,6 +114,11 @@ install_fonts() {
   install_via_yaourt 'ttf-monaco'
 }
 
+install_exa() {
+  install_via_pacman 'community/exa'
+  ln -s "$(which exa)" '/usr/local/bin/ls'
+}
+
 # -- SPECIFIC FILE CREATION FUNCTIONS -- #
 
 create_bashrc_autocompletion() {
