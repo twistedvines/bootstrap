@@ -60,8 +60,7 @@ install_config() {
 install_vim() {
   install_via_pacman 'extra/vim'
   clone_repository 'twistedvines/.vim'
-  install_repository 'twistedvines/.vim' "${HOME}/.vim"
-  ln -s "${HOME}/.vim/.vimrc" "${HOME}/.vimrc"
+  cd '/usr/local/src/twistedvines/.vim' && make install
 }
 
 install_neovim() {
