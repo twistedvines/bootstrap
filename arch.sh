@@ -75,8 +75,7 @@ install_neovim() {
 install_tmux() {
   install_via_pacman 'community/tmux'
   clone_repository 'twistedvines/.tmux'
-  install_repository 'twistedvines/.tmux' "${HOME}/.tmux"
-  ln -s "${HOME}/.tmux/.tmux.conf" "${HOME}/.tmux.conf"
+  cd '/usr/local/src/twistedvines/.tmux' && make install
 }
 
 install_rbenv() {
